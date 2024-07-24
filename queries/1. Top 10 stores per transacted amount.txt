@@ -1,0 +1,17 @@
+SELECT
+  s.id AS store_id,
+  s.name AS store_name,
+  SUM(t.amount) AS total_amount
+FROM
+  `spatial-acumen-415519.SumUp_Case.transactions` t
+JOIN
+  `spatial-acumen-415519.SumUp_Case.devices` d ON t.device_id = d.id
+JOIN
+  `spatial-acumen-415519.SumUp_Case.stores` s ON d.store_id = s.id
+WHERE
+  t.status = 'accepted'
+GROUP BY
+  store_id, store_name
+ORDER BY
+  total_amount DESC
+LIMIT 10;

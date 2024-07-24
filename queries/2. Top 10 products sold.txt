@@ -1,0 +1,14 @@
+SELECT
+  t.product_name,
+  COUNT(*) AS total_sold,
+  sum(t.amount) AS total_amt
+FROM
+  `spatial-acumen-415519.SumUp_Case.transactions` t
+WHERE
+  t.status = 'accepted'
+GROUP BY
+  t.product_name
+ORDER BY
+  -- If there is a tie in the top 10 products, the tiebreaker is the sales amount of the product. 
+  total_sold DESC, total_amt desc
+LIMIT 10;

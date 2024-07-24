@@ -1,0 +1,20 @@
+WITH total_transactions AS (
+  SELECT COUNT(*) AS total_count
+  FROM `spatial-acumen-415519.SumUp_Case.transactions`
+  WHERE
+    status = 'accepted'
+)
+SELECT
+  d.type AS device_type,
+  COUNT(t.id) AS transaction_count,
+  ROUND((COUNT(t.id) / (SELECT total_count FROM total_transactions)) * 100, 1) AS percentage
+FROM
+  `spatial-acumen-415519.SumUp_Case.transactions` t
+JOIN
+  `spatial-acumen-415519.SumUp_Case.devices` d ON t.device_id = d.id
+WHERE
+  status = 'accepted'
+GROUP BY
+  device_type
+ORDER BY
+  device_type;

@@ -1,0 +1,32 @@
+WITH store_transactions AS (
+  SELECT
+    s.id AS store_id,
+    t.created_at,
+    ROW_NUMBER() OVER(PARTITION BY s.id ORDER BY t.created_at) AS transaction_rank
+  FROM
+    `spatial-acumen-415519.SumUp_Case.transactions` t
+  JOIN
+    `spatial-acumen-415519.SumUp_Case.devices` d ON t.device_id = d.id
+  JOIN
+    `spatial-acumen-415519.SumUp_Case.stores` s ON d.store_id = s.id
+  WHERE
+    t.status = 'accepted'
+),
+transaction_intervals AS (
+  SELECT
+    store_id,
+    MAX(CASE WHEN transaction_rank = 1 THEN created_at END) AS first_transaction,
+    MAX(CASE WHEN transaction_rank = 6 THEN created_at END) AS sixth_transaction
+  FROM
+    store_transactions
+  WHERE
+    transaction_rank <= 6
+  GROUP BY
+    store_id
+)
+SELECT
+  ROUND(AVG(TIMESTAMP_DIFF(sixth_transaction, first_transaction, DAY)), 1) AS avg_days_to_5th_transaction
+FROM
+  transaction_intervals
+WHERE
+  sixth_transaction IS NOT NULL;

@@ -1,0 +1,16 @@
+SELECT
+  s.typology,
+  s.country,
+  ROUND(AVG(t.amount),1) AS average_amount
+FROM
+  `spatial-acumen-415519.SumUp_Case.transactions` t
+JOIN
+  `spatial-acumen-415519.SumUp_Case.devices` d ON t.device_id = d.id
+JOIN
+  `spatial-acumen-415519.SumUp_Case.stores` s ON d.store_id = s.id
+where
+  t.status = 'accepted'
+GROUP BY
+  s.typology, s.country
+ORDER BY
+  s.typology, s.country;
