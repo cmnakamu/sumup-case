@@ -3,8 +3,7 @@ README
 SECTION 1: Before I start: Checklist of What I will need
 
 1. Google account: mainly to access bigquery platform which is the datawarehouse i chose and where the sql queries to answer the 5 bussines questions will be excuted. I created a shared google account for this case purpose. below credentials:
-      - email: shared.bigquery.access@gmail.com
-      - pass: #sUmpup24
+
 
 2. Google service account (json file) which i provided (attached in email because "security" purposes), file name: 'sumup_case_sa'. This file will be use when running the python script to load the 3 tables in my bigquery project
   
